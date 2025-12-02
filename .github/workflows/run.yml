@@ -3,7 +3,7 @@ name: Check BBC News
 on:
   schedule:
     - cron: "*/5 * * * *"
-  workflow_dispatch: # Allows you to run it manually to test
+  workflow_dispatch: 
 
 jobs:
   run-bot:
