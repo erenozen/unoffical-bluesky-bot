@@ -132,4 +132,9 @@ async function postToBluesky(agent, item) {
     });
 }
 
-main();
+main().then(() => {
+  process.exit(0); // Force quit successfully
+}).catch((error) => {
+  console.error(error);
+  process.exit(1); // Force quit with error
+});
