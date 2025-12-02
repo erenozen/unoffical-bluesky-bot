@@ -1,6 +1,7 @@
 import fs from "fs";
 import Parser from "rss-parser"; // To read the RSS feed
-import { BskyAgent, RichText } from "@atproto/api"; // Bluesky API
+import pkg from "@atproto/api";
+const { BskyAgent, RichText } = pkg;
 import * as cheerio from "cheerio"; // For scraping the image
 import fetch from "node-fetch"; // For fetching HTML and Images
 
