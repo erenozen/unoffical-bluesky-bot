@@ -2,8 +2,7 @@ name: Check BBC News
 
 on:
   schedule:
-    # Run every 30 minutes. You can change '30' to '15' for faster updates.
-    - cron: "*/30 * * * *"
+    - cron: "*/5 * * * *"
   workflow_dispatch: # Allows you to run it manually to test
 
 jobs:
