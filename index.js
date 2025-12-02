@@ -9,7 +9,7 @@ import fetch from "node-fetch";
 const RSS_URL = "http://feeds.bbci.co.uk/turkce/rss.xml";
 const STATE_FILE = "state.json";
 
-// Helper: Fetch with 5-second timeout
+// Helper: Fetch with 42-second timeout
 const fetchWithTimeout = async (url, options = {}) => {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 42000); // 42 seconds max
