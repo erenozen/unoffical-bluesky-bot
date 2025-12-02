@@ -12,7 +12,7 @@ const STATE_FILE = "state.json";
 // Helper: Fetch with 5-second timeout
 const fetchWithTimeout = async (url, options = {}) => {
   const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 5000); // 5 seconds max
+  const timeout = setTimeout(() => controller.abort(), 42000); // 42 seconds max
   try {
     const response = await fetch(url, { ...options, signal: controller.signal });
     return response;
