@@ -1,0 +1,37 @@
+name: Check BBC News
+
+on:
+  schedule:
+    # Run every 30 minutes. You can change '30' to '15' for faster updates.
+    - cron: "*/30 * * * *"
+  workflow_dispatch: # Allows you to run it manually to test
+
+jobs:
+  run-bot:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # REQUIRED to save the state.json file
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run Bot Script
+        env:
+          BLUESKY_HANDLE: ${{ secrets.BLUESKY_HANDLE }}
+          BLUESKY_PASSWORD: ${{ secrets.BLUESKY_PASSWORD }}
+        run: npm start
+
+      - name: Commit State Changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Update state.json [skip ci]"
+          file_pattern: state.json
