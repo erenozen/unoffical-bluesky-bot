@@ -127,7 +127,8 @@ async function main() {
 async function postToBluesky(agent, item) {
   const title = item.title.trim();
   const link = item.link;
-  const desc = item.contentSnippet ? item.contentSnippet.substring(0, 250) + "..." : "";
+  // contentSnippet is the text-only version of the description
+  const cleanDescription = item.contentSnippet || "";
 
   console.log(`Posting: "${title}"`);
 
@@ -141,6 +142,7 @@ async function postToBluesky(agent, item) {
     if (imageUrl) {
       const imageResponse = await fetchWithTimeout(imageUrl);
       const buffer = await imageResponse.arrayBuffer();
+      // Skip huge images
       if (buffer.byteLength < 950000) {
         const { data } = await agent.uploadBlob(new Uint8Array(buffer), {
           encoding: imageResponse.headers.get("content-type") || "image/jpeg",
@@ -152,12 +154,29 @@ async function postToBluesky(agent, item) {
     console.log(`Image skipped: ${e.message}`);
   }
 
-  const rt = new RichText({ text: title });
+  // We use the description (contentSnippet) as the main text.
+  // We MUST truncate it to 300 characters or Bluesky will reject it.
+  let postText = cleanDescription;
+  if (postText.length > 300) {
+    postText = postText.substring(0, 296) + "...";
+  }
+
+  // Fallback: If description is empty, use the title
+  if (!postText) {
+    postText = title;
+  }
+
+  const rt = new RichText({ text: postText });
   await rt.detectFacets(agent);
 
   const embed = {
     $type: "app.bsky.embed.external",
-    external: { uri: link, title: title, description: desc },
+    external: { 
+        uri: link, 
+        title: title, 
+        // We set the description to empty in the card since the post text now contains it
+        description: "" 
+    },
   };
 
   if (imageBlob) embed.external.thumb = imageBlob;
