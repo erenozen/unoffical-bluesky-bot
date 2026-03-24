@@ -156,7 +156,7 @@ async function postToBluesky(agent, item) {
 
   // We use the description (contentSnippet) as the main text.
   // We MUST truncate it to 300 characters or Bluesky will reject it.
-  let postText = cleanDescription;
+  let postText = "BBC Türkçe: " + cleanDescription;
   if (postText.length > 300) {
     postText = postText.substring(0, 296) + "...";
   }
